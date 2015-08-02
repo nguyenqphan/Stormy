@@ -1,10 +1,12 @@
-package com.nguyenqphan.stormy;
+package com.nguyenqphan.stormy.UI;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+
+import com.nguyenqphan.stormy.R;
 
 /**
  * Created by nguyenphan on 7/29/15.
