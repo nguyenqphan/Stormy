@@ -228,6 +228,7 @@ public class MainActivity extends ActionBarActivity {
             hour.setSummary(jsonHour.getString("summary"));;
             hour.setTemperature((jsonHour.getDouble("temperature")));
             hour.setIcon(jsonHour.getString("icon"));
+            hour.setTime(jsonHour.getLong("time"));
             hour.setTimezone(timezone);
 
             hours[i] = hour;
