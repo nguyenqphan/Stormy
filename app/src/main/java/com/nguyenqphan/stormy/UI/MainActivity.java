@@ -204,6 +204,7 @@ public class MainActivity extends ActionBarActivity {
             day.setSummary(jsonday.getString("summary"));
             day.setIcon(jsonday.getString("icon"));
             day.setTemperatureMax(jsonday.getDouble("temperatureMax"));
+            day.setTime(jsonday.getLong("time"));
             day.setTimezone(timezone);
 
             days[i] = day;
