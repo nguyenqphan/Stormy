@@ -40,6 +40,7 @@ import butterknife.OnClick;
 public class MainActivity extends ActionBarActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    public static final String DAILY_FORECAST = "DAILY_FORECAST";
 
     //private Current mCurrent;
     private Forecast mForecast;
@@ -71,7 +72,6 @@ public class MainActivity extends ActionBarActivity {
                 getForecast(latitude, longitude);
             }
         });
-
 
        // mTemperatureLabel = (TextView)findViewById(R.id.temperatureLabel);
 
@@ -272,6 +272,8 @@ public class MainActivity extends ActionBarActivity {
     @OnClick(R.id.dailyButton)
     public void starDailyActivity(View view){
         Intent intent = new Intent(this, DailyForecastActivity.class);
+        intent.putExtra(DAILY_FORECAST, mForecast.getDailyForecast());
+
         startActivity(intent);
     }
 
