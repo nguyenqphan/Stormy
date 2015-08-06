@@ -3,6 +3,8 @@ package com.nguyenqphan.stormy.UI;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.content.ContextCompat;
@@ -15,6 +17,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.nguyenqphan.stormy.R;
 import com.nguyenqphan.stormy.weather.Current;
 import com.nguyenqphan.stormy.weather.Day;
@@ -37,7 +43,16 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+
+    private final String LOG_TAG = "NguyenTestApp";
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    //public static Location mLocation;
+
+   // double longitude = location.getLongitude();
+    //double latitude = location.getLatitude();
+
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final String DAILY_FORECAST = "DAILY_FORECAST";
@@ -56,16 +71,27 @@ public class MainActivity extends ActionBarActivity {
     @InjectView(R.id.refreshImageView)  ImageView mRefreshImageView;
     @InjectView(R.id.progressBar) ProgressBar mProgressBar;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
+         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        double lat = location.getLatitude();
+        double lon = location.getLongitude();
+
+
         mProgressBar.setVisibility(View.INVISIBLE);
 
-        final double latitude = 37.8267;
-        final double longitude = -122.423;
+       // final double latitude =16.461943;
+       final double latitude = location.getLatitude();
+        final double longitude = location.getLongitude();
+        //final double longitude = 107.58542;
 
         mRefreshImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +101,12 @@ public class MainActivity extends ActionBarActivity {
         });
 
        // mTemperatureLabel = (TextView)findViewById(R.id.temperatureLabel);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
 
         getForecast(latitude, longitude);
 
@@ -287,4 +319,19 @@ public class MainActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    @Override
+    public void onConnected(Bundle bundle) {
+        //LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Log.i(LOG_TAG, "GoogleApiClient has been suspended");
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.i(LOG_TAG, "GoogleApiClient has failed");
+    }
 }
